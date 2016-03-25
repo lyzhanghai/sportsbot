@@ -41,44 +41,66 @@ footballm = []
 footballg = []
 
 
+def lastsix():
+    a = []
+    rq = db.execute_sql(""" SELECT DATE_FORMAT(a.matchdate, %s) fdate FROM games a
+                        where a.matchdate > curdate() - interval
+                        (dayofmonth(curdate()) - 1) day - interval 6 month
+                        GROUP BY fdate ORDER BY a.matchdate
+                        """, ('%m/%y'))
+    for row in rq.fetchall():
+        a.append(row[0])
+    return a
+
+months = lastsix()
+
+
 def getHockey():
     rq = db.execute_sql("""SELECT DATE_FORMAT(a.matchdate, %s) GameDate,
                         COUNT(a.hometeam) Games FROM games a JOIN leagues b on
                         a.league = b.leagues WHERE b.sports = %s GROUP BY
-                        GameDate, b.sports LIMIT 6""", ('%m/%y', 'hockey'))
+                        GameDate, b.sports ORDER BY a.matchdate""",
+                        ('%m/%y', 'hockey'))
     for row in rq.fetchall():
-        hockeym.append(row[0])
-        hockeyg.append(row[1])
+        if row[0] in months:
+            hockeym.append(row[0])
+            hockeyg.append(row[1])
 
 
 def getBaseball():
     rq = db.execute_sql("""SELECT DATE_FORMAT(a.matchdate, %s) GameDate,
                         COUNT(a.hometeam) Games FROM games a JOIN leagues b on
                         a.league = b.leagues WHERE b.sports = %s GROUP BY
-                        GameDate, b.sports LIMIT 6""", ('%m/%y', 'baseball'))
+                        GameDate, b.sports ORDER BY a.matchdate""",
+                        ('%m/%y', 'baseball'))
     for row in rq.fetchall():
-        baseballm.append(row[0])
-        baseballg.append(row[1])
+        if row[0] in months:
+            baseballm.append(row[0])
+            baseballg.append(row[1])
 
 
 def getSoccer():
     rq = db.execute_sql("""SELECT DATE_FORMAT(a.matchdate, %s) GameDate,
                         COUNT(a.hometeam) Games FROM games a JOIN leagues b on
                         a.league = b.leagues WHERE b.sports = %s GROUP BY
-                        GameDate, b.sports LIMIT 6""", ('%m/%y', 'soccer'))
+                        GameDate, b.sports ORDER BY a.matchdate""",
+                        ('%m/%y', 'soccer'))
     for row in rq.fetchall():
-        soccerm.append(row[0])
-        soccerg.append(row[1])
+        if row[0] in months:
+            soccerm.append(row[0])
+            soccerg.append(row[1])
 
 
 def getFootball():
     rq = db.execute_sql("""SELECT DATE_FORMAT(a.matchdate, %s) GameDate,
                         COUNT(a.hometeam) Games FROM games a JOIN leagues b on
                         a.league = b.leagues WHERE b.sports = %s GROUP BY
-                        GameDate, b.sports LIMIT 6""", ('%m/%y', 'football'))
+                        GameDate, b.sports ORDER BY a.matchdate""",
+                        ('%m/%y', 'football'))
     for row in rq.fetchall():
-        footballm.append(row[0])
-        footballg.append(row[1])
+        if row[0] in months:
+            footballm.append(row[0])
+            footballg.append(row[1])
 
 getFootball()
 getSoccer()
