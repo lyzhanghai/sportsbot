@@ -45,6 +45,7 @@ soccerg = []
 footballm = []
 footballg = []
 
+
 def lastmonth():
     a = []
     rq = db.execute_sql(""" SELECT a.matchdate fdate FROM games a
@@ -66,7 +67,7 @@ def get_week_days(year, week):
         d = d+datetime.timedelta(7-d.weekday())
     else:
         d = d - datetime.timedelta(d.weekday())
-    dlt = datetime.timedelta(days= (week-1) * 7)
+    dlt = datetime.timedelta(days=(week-1) * 7)
     return (datetime.datetime.strftime(d + dlt, '%m/%d') + '-' +
             datetime.datetime.strftime(d + dlt + datetime.timedelta(days=6),
             '%m/%d'))
