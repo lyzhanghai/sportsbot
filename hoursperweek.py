@@ -45,6 +45,20 @@ soccerg = []
 footballm = []
 footballg = []
 
+def lastmonth():
+    a = []
+    rq = db.execute_sql(""" SELECT a.matchdate fdate FROM games a
+                        where a.matchdate > curdate() - interval
+                        (dayofmonth(curdate()) - 1) day - interval 1 week
+                        ORDER BY a.matchdate
+                        """)
+    for row in rq.fetchall():
+        a.append(row[0])
+    return a
+
+month = lastmonth()
+print month
+
 
 def get_week_days(year, week):
     d = datetime.datetime(year, 1, 1)
@@ -52,7 +66,7 @@ def get_week_days(year, week):
         d = d+datetime.timedelta(7-d.weekday())
     else:
         d = d - datetime.timedelta(d.weekday())
-    dlt = datetime.timedelta(days=((week) * 7) - 1)
+    dlt = datetime.timedelta(days= (week-1) * 7)
     return (datetime.datetime.strftime(d + dlt, '%m/%d') + '-' +
             datetime.datetime.strftime(d + dlt + datetime.timedelta(days=6),
             '%m/%d'))
@@ -63,11 +77,12 @@ def getBaseball():
                         FROM games a JOIN leagues c ON a.league = c.leagues
                         JOIN gametime b ON c.sports = b.sport WHERE b.sport =
                         'baseball' GROUP BY DATE_FORMAT(thedate, %s) ORDER BY
-                        thedate ASC LIMIT 4""", ('%U/%Y'))
+                        thedate ASC """, ('%U/%Y'))
     for row in rq.fetchall():
-        baseballm.append(get_week_days(int(row[0].strftime('%Y')),
-                         int(row[0].strftime('%U'))))
-        baseballg.append(int(row[1]))
+        if row[0] in month:
+            baseballm.append(get_week_days(int(row[0].strftime('%Y')),
+                             int(row[0].strftime('%U'))))
+            baseballg.append(int(row[1]))
 
 getBaseball()
 
@@ -77,11 +92,12 @@ def gethockey():
                         FROM games a JOIN leagues c ON a.league = c.leagues
                         JOIN gametime b ON c.sports = b.sport WHERE b.sport =
                         'hockey' GROUP BY DATE_FORMAT(thedate, %s) ORDER BY
-                        thedate ASC LIMIT 4""", ('%U/%Y'))
+                        thedate ASC""", ('%U/%Y'))
     for row in rq.fetchall():
-        hockeym.append(get_week_days(int(row[0].strftime('%Y')),
-                       int(row[0].strftime('%U'))))
-        hockeyg.append(int(row[1]))
+        if row[0] in month:
+            hockeym.append(get_week_days(int(row[0].strftime('%Y')),
+                           int(row[0].strftime('%U'))))
+            hockeyg.append(int(row[1]))
 
 gethockey()
 
@@ -91,11 +107,12 @@ def getsoccer():
                         FROM games a JOIN leagues c ON a.league = c.leagues
                         JOIN gametime b ON c.sports = b.sport WHERE b.sport =
                         'soccer' GROUP BY DATE_FORMAT(thedate, %s) ORDER BY
-                        thedate ASC LIMIT 4""", ('%U/%Y'))
+                        thedate ASC""", ('%U/%Y'))
     for row in rq.fetchall():
-        soccerm.append(get_week_days(int(row[0].strftime('%Y')),
-                       int(row[0].strftime('%U'))))
-        soccerg.append(int(row[1]))
+        if row[0] in month:
+            soccerm.append(get_week_days(int(row[0].strftime('%Y')),
+                           int(row[0].strftime('%U'))))
+            soccerg.append(int(row[1]))
 
 getsoccer()
 
@@ -105,11 +122,12 @@ def getfootball():
                         FROM games a JOIN leagues c ON a.league = c.leagues
                         JOIN gametime b ON c.sports = b.sport WHERE b.sport =
                         'football' GROUP BY DATE_FORMAT(thedate, %s) ORDER BY
-                        thedate ASC LIMIT 4""", ('%U/%Y'))
+                        thedate ASC""", ('%U/%Y'))
     for row in rq.fetchall():
-        footballm.append(get_week_days(int(row[0].strftime('%Y')),
-                         int(row[0].strftime('%U'))))
-        footballg.append(int(row[1]))
+        if row[0] in month:
+            footballm.append(get_week_days(int(row[0].strftime('%Y')),
+                             int(row[0].strftime('%U'))))
+            footballg.append(int(row[1]))
 
 getfootball()
 
