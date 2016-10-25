@@ -52,10 +52,10 @@ df = pd.DataFrame([[ij for ij in i] for i in toPandas])
 df.rename(columns={0: 'Team', 1: 'Games', 2: 'Sport'}, inplace=True)
 
 colors = dict(
-    Soccer='#d62728',
-    Hockey='#ff7f0e',
+    Soccer='#1f77b4',
+    Hockey='#D21E27',
     Baseball='#2ca02c',
-    Football='#1f77b4',
+    Football='#FC7E1A',
     Basketball='#9264BC'
 )
 color = []
