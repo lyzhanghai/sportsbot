@@ -44,6 +44,8 @@ soccerm = []
 soccerg = []
 footballm = []
 footballg = []
+basketballm = []
+basketballg = []
 
 
 def lastmonth():
@@ -132,6 +134,20 @@ def getfootball():
 
 getfootball()
 
+def getbasketball():
+    rq = db.execute_sql("""SELECT a.matchdate thedate, SUM(b.gtime) GameTime
+                        FROM games a JOIN leagues c ON a.league = c.leagues
+                        JOIN gametime b ON c.sports = b.sport WHERE b.sport =
+                        'basketball' GROUP BY DATE_FORMAT(thedate, %s) ORDER BY
+                        thedate ASC""", ('%U/%Y'))
+    for row in rq.fetchall():
+        if row[0] in month:
+            basketballm.append(get_week_days(int(row[0].strftime('%Y')),
+                             int(row[0].strftime('%U'))))
+            basketballg.append(int(row[1]))
+
+getbasketball()
+
 
 trace1 = Bar(
     x=footballm,
@@ -154,6 +170,12 @@ trace3 = Bar(
 trace4 = Bar(
     x=hockeym,
     y=hockeyg,
+    name='Hockey'
+)
+
+trace5 = Bar(
+    x=basketballm,
+    y=basketballg,
     name='Hockey'
 )
 
