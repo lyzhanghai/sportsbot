@@ -145,7 +145,7 @@ trace4 = Bar(
     name='Hockey'
 )
 
-trace4 = Bar(
+trace5 = Bar(
     x=basketballm,
     y=basketballg,
     name='Basketball'
