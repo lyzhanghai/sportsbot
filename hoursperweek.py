@@ -149,13 +149,13 @@ def getbasketball():
 getbasketball()
 
 
-trace1 = Bar(
+trace2 = Bar(
     x=footballm,
     y=footballg,
     name='Football'
 )
 
-trace2 = Bar(
+trace1 = Bar(
     x=soccerm,
     y=soccerg,
     name='Soccer'

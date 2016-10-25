@@ -47,7 +47,7 @@ def lastsix():
     a = []
     rq = db.execute_sql(""" SELECT DATE_FORMAT(a.matchdate, %s) fdate FROM games a
                         where a.matchdate > curdate() - interval
-                        (dayofmonth(curdate()) - 1) day - interval 6 month
+                        (dayofmonth(curdate()) - 1) day - interval 5 month
                         GROUP BY fdate ORDER BY a.matchdate
                         """, ('%m/%y'))
     for row in rq.fetchall():
@@ -121,13 +121,13 @@ getBaseball()
 getHockey()
 getBasketball()
 
-trace1 = Bar(
+trace2 = Bar(
     x=footballm,
     y=footballg,
     name='Football'
 )
 
-trace2 = Bar(
+trace1 = Bar(
     x=soccerm,
     y=soccerg,
     name='Soccer'
